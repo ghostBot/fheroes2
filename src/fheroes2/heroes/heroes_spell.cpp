@@ -547,7 +547,8 @@ bool ActionSpellTownPortal( Heroes & hero )
                 display.Flip();
             }
         }
-        teleportDestination = listBox.GetCurrent();
+        if ( listBox.isSelected() )
+            teleportDestination = listBox.GetCurrent();
     }
 
     // restore settings
@@ -564,7 +565,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     I.Redraw();
     display.Flip();
 
-    if ( result == Dialog::OK )
+    if ( result == Dialog::OK && teleportDestination != -1 )
         return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( teleportDestination ) ) );
 
     // restore player focus
