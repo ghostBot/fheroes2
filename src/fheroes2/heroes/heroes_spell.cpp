@@ -504,7 +504,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     s32 teleportDestination = -1;
     int result = Dialog::ZERO;
     {
-        Dialog::FrameBorder frame( px - 71, I.GetStatusWindow().GetArea().y + I.GetStatusWindow().GetArea().h + BORDERWIDTH, 215, 184 );
+        Dialog::FrameBorder frame( display.w() - BORDERWIDTH * 2 - 215, display.h() - BORDERWIDTH * 2 - 184, 215, 184 );
         const Rect & area = frame.GetArea();
 
         CastleIndexListBox listBox( area, result );
