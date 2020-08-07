@@ -105,8 +105,12 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
     const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
 
     if ( castle ) {
-        Text text( castle->GetName().substr( 0, 10 ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 10, dsty );
+        Text text( castle->GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        size_t len = castle->GetName().length();
+        while ( text.w() + 10 > rtAreaItems.w && len > 0 ) {
+            text = Text( castle->GetName().substr( 0, len-- ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        }
+        text.Blit( dstx + 5, dsty );
     }
 }
 
