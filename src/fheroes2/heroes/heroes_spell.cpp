@@ -113,17 +113,17 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
 void CastleIndexListBox::RedrawBackground( const Point & dst )
 {
     Text text( _( "Select castle:" ), Font::YELLOW_BIG );
-    text.Blit( dst.x + 72 - text.w() / 2, dst.y + 6 );
+    text.Blit( rtAreaItems.x + ( rtAreaItems.w + 24 - text.w() ) / 2, dst.y + 6 );
 
-    AGG::GetICN( ICN::LISTBOXS, 0 ).RenderScale( Size( 120, 19 ) ).Blit( dst.x + 2, dst.y + 30, Display::Get() );
+    AGG::GetICN( ICN::LISTBOXS, 0 ).Blit( dst.x + 2, dst.y + 30 );
     for ( u32 ii = 1; ii < 5; ++ii )
-        AGG::GetICN( ICN::LISTBOXS, 1 ).RenderScale( Size( 120, 19 ) ).Blit( dst.x + 2, dst.y + 30 + ( ii * 19 ), Display::Get() );
-    AGG::GetICN( ICN::LISTBOXS, 2 ).RenderScale( Size( 120, 19 ) ).Blit( dst.x + 2, dst.y + 125, Display::Get() );
+        AGG::GetICN( ICN::LISTBOXS, 1 ).Blit( dst.x + 2, dst.y + 30 + ( ii * 19 ) );
+    AGG::GetICN( ICN::LISTBOXS, 2 ).Blit( dst.x + 2, dst.y + 123 );
 
-    AGG::GetICN( ICN::LISTBOXS, 7 ).Blit( dst.x + 120, dst.y + 50 );
+    AGG::GetICN( ICN::LISTBOXS, 7 ).Blit( dst.x + 191, dst.y + 50 );
     for ( u32 ii = 1; ii < 3; ++ii )
-        AGG::GetICN( ICN::LISTBOXS, 8 ).Blit( dst.x + 120, dst.y + 50 + ( ii * 19 ) );
-    AGG::GetICN( ICN::LISTBOXS, 9 ).Blit( dst.x + 120, dst.y + 104 );
+        AGG::GetICN( ICN::LISTBOXS, 8 ).Blit( dst.x + 191, dst.y + 50 + ( ii * 19 ) );
+    AGG::GetICN( ICN::LISTBOXS, 9 ).Blit( dst.x + 191, dst.y + 104 );
 }
 
 bool Heroes::ActionSpellCast( const Spell & spell )
@@ -504,22 +504,23 @@ bool ActionSpellTownPortal( Heroes & hero )
     s32 teleportDestination = -1;
     int result = Dialog::ZERO;
     {
-        Dialog::FrameBorder frame( px, I.GetStatusWindow().GetArea().y + I.GetStatusWindow().GetArea().h, 144, 200 );
+        Dialog::FrameBorder frame( px - 71, I.GetStatusWindow().GetArea().y + I.GetStatusWindow().GetArea().h + BORDERWIDTH, 215, 184 );
         const Rect & area = frame.GetArea();
 
         CastleIndexListBox listBox( area, result );
-        listBox.RedrawBackground( area );
-        listBox.SetScrollButtonUp( ICN::LISTBOXS, 3, 4, Point( area.x + 120, area.y + 30 ) );
-        listBox.SetScrollButtonDn( ICN::LISTBOXS, 5, 6, Point( area.x + 120, area.y + 123 ) );
-        listBox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOXS, 10 ), Rect( area.x + 124, area.y + 54, 14, 64 ) );
+
+        listBox.SetScrollButtonUp( ICN::LISTBOXS, 3, 4, Point( area.x + 191, area.y + 30 ) );
+        listBox.SetScrollButtonDn( ICN::LISTBOXS, 5, 6, Point( area.x + 191, area.y + 123 ) );
+        listBox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOXS, 10 ), Rect( area.x + 195, area.y + 54, 14, 65 ) );
         listBox.SetAreaMaxItems( 5 );
-        listBox.SetAreaItems( Rect( area.x + 5, area.y + 32, 120, 114 ) );
+        listBox.SetAreaItems( Rect( area.x + 5, area.y + 32, 191, 114 ) );
         listBox.SetListContent( castles );
         listBox.Unselect();
+        listBox.RedrawBackground( area );
         listBox.Redraw();
 
-        Button buttonOkay( px + 40, area.y + 148, ICN::REQUESTS, 1, 2 );
-        Button buttonCancel( px + 40, area.y + 173, ICN::REQUESTS, 3, 4 );
+        Button buttonOkay( area.x, area.y + area.h - AGG::GetICN( ICN::REQUESTS, 1 ).h(), ICN::REQUESTS, 1, 2 );
+        Button buttonCancel( area.x + area.w - AGG::GetICN( ICN::REQUESTS, 1 ).w(), area.y + area.h - AGG::GetICN( ICN::REQUESTS, 1 ).h(), ICN::REQUESTS, 3, 4 );
         buttonOkay.Draw();
         buttonCancel.Draw();
 
